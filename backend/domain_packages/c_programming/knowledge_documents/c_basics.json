@@ -1,0 +1,72 @@
+[
+  {
+    "title": "C程序入口与编译",
+    "content": "C程序通常从main函数开始执行。源文件经过预处理、编译、汇编和链接后形成可执行文件。",
+    "source": "https://en.cppreference.com/w/c/language/main_function",
+    "version": "C17",
+    "skill_id": "c_basic"
+  },
+  {
+    "title": "标识符与变量",
+    "content": "标识符由字母、数字和下划线组成，不能以数字开头，也不能与关键字冲突。变量应在使用前声明。",
+    "source": "https://en.cppreference.com/w/c/language/identifier",
+    "version": "C17",
+    "skill_id": "c_variable"
+  },
+  {
+    "title": "基本算术类型",
+    "content": "C语言基本算术类型包括整数类型和浮点类型。具体宽度与实现相关，应使用sizeof确认对象大小。",
+    "source": "https://en.cppreference.com/w/c/language/arithmetic_types",
+    "version": "C17",
+    "skill_id": "c_datatype"
+  },
+  {
+    "title": "整数除法",
+    "content": "当两个操作数都是整数时，除法结果向零截断；需要小数结果时应先转换至少一个操作数为浮点类型。",
+    "source": "https://en.cppreference.com/w/c/language/operator_arithmetic",
+    "version": "C17",
+    "skill_id": "c_operator"
+  },
+  {
+    "title": "控制流",
+    "content": "C程序通过复合语句、选择语句和迭代语句组织执行流程。条件表达式为零时视为假，非零时视为真。",
+    "source": "https://en.cppreference.com/w/c/language/statements",
+    "version": "C17",
+    "skill_id": "c_control"
+  },
+  {
+    "title": "if与switch",
+    "content": "if根据条件选择分支；switch根据整型表达式匹配case标签。default用于没有case匹配时的处理。",
+    "source": "https://en.cppreference.com/w/c/language/if",
+    "version": "C17",
+    "skill_id": "c_if"
+  },
+  {
+    "title": "循环与break",
+    "content": "for、while和do-while用于重复执行语句。break退出最内层循环，continue跳过本轮剩余部分。",
+    "source": "https://en.cppreference.com/w/c/language/for",
+    "version": "C17",
+    "skill_id": "c_loop"
+  },
+  {
+    "title": "数组边界",
+    "content": "数组元素在内存中连续排列，下标从0开始。访问合法范围之外的元素会产生未定义行为。",
+    "source": "https://en.cppreference.com/w/c/language/array",
+    "version": "C17",
+    "skill_id": "c_array"
+  },
+  {
+    "title": "函数声明与调用",
+    "content": "函数声明描述返回类型和参数类型。调用前应有可见声明，返回值类型必须与声明一致。",
+    "source": "https://en.cppreference.com/w/c/language/function_declaration",
+    "version": "C17",
+    "skill_id": "c_function"
+  },
+  {
+    "title": "指针与解引用",
+    "content": "指针保存对象或函数地址。取地址运算符&获得地址，解引用运算符*访问所指对象；空指针不可解引用。",
+    "source": "https://en.cppreference.com/w/c/language/pointer",
+    "version": "C17",
+    "skill_id": "c_pointer"
+  }
+]

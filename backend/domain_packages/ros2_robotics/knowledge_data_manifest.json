@@ -1,0 +1,28 @@
+{
+  "dataset_id": "ros2_robotics_kb",
+  "version": "2.1.0",
+  "data_contract_version": "2.0",
+  "ros_distro": "humble",
+  "knowledge_evidence_count": 300,
+  "unique_claim_count": 300,
+  "concept_count": 50,
+  "assessment_count": 30,
+  "practice_task_count": 20,
+  "validator_spec_count": 10,
+  "benchmark_seed_count": 100,
+  "human_review_queue_count": 300,
+  "human_verified_count": 0,
+  "verification_policy": {
+    "trusted_source": "白名单官方来源+结构化整理，可用于低风险检索；不能等价为人工verified。",
+    "verified": "人工核对claim与精确来源定位；高风险项还应通过适用的静态/沙箱/人工验证。"
+  },
+  "known_gaps": [
+    "报告目标为500-800条人工原子证据，当前为300条。",
+    "300条证据尚未完成人工逐条签署；human_review_queue.jsonl已生成。",
+    "source_locator目前多数为section_hint，不是人工确认的精确锚点。",
+    "validator_registry当前为spec_only，尚未接入真实沙箱。",
+    "30道诊断题不足以稳定估计IRT参数，需扩大题库并积累真实作答。",
+    "retrieval_benchmark_seed是种子集，不是冻结人工金标，不能据此宣称Recall@10达标。",
+    "知识库当前集中于Humble，缺少跨版本冲突对照集。"
+  ]
+}

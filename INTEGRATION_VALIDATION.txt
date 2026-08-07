@@ -1,0 +1,23 @@
+ProofGraph Agent60 + KB2.1 integration validation
+
+Structural knowledge validation: PASS
+- evidence=300
+- unique_evidence_ids=300
+- unique_claims=300
+- concepts=50
+- skills=10
+- assessments=30
+- practice_tasks=20
+- validator_specs=10
+- retrieval_benchmark_seeds=100
+- human_review_queue=300
+- human_verified=0
+- skill_graph_dag=true
+- concept_graph_dag=true
+
+Python compileall: PASS
+Generation -> Review interface smoke using real low-risk KB evidence: PASS (approve)
+
+DB-dependent pytest: NOT COMPLETED in this execution environment.
+Collection stops because `aiosqlite` is not installed in the container runtime.
+The project requirements.txt already declares aiosqlite; rerun pytest after installing project requirements.

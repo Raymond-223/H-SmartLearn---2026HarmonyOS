@@ -1,0 +1,16 @@
+[
+  {"from": "linux_environment", "to": "ros2_node", "relation": "prerequisite"},
+  {"from": "linux_environment", "to": "ros2_topic", "relation": "prerequisite"},
+  {"from": "ros2_node", "to": "ros2_topic", "relation": "prerequisite"},
+  {"from": "ros2_node", "to": "ros2_service", "relation": "prerequisite"},
+  {"from": "ros2_topic", "to": "ros2_topic_custom", "relation": "prerequisite"},
+  {"from": "ros2_topic", "to": "ros2_tf2", "relation": "prerequisite"},
+  {"from": "ros2_node", "to": "ros2_launch", "relation": "prerequisite"},
+  {"from": "ros2_topic", "to": "ros2_nav2_basic", "relation": "prerequisite"},
+  {"from": "ros2_tf2", "to": "ros2_nav2_basic", "relation": "prerequisite"},
+  {"from": "ros2_tf2", "to": "ros2_slam", "relation": "prerequisite"},
+  {"from": "ros2_nav2_basic", "to": "ros2_slam", "relation": "related"},
+  {"from": "ros2_robot_bringup", "to": "ros2_nav2_basic", "relation": "prerequisite"},
+  {"from": "ros2_robot_bringup", "to": "ros2_slam", "relation": "prerequisite"},
+  {"from": "ros2_launch", "to": "ros2_robot_bringup", "relation": "prerequisite"}
+]

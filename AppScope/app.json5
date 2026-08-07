@@ -1,0 +1,11 @@
+{
+  "app": {
+    "bundleName": "com.hsmartlearn.platform",
+    "vendor": "H-SmartLearn",
+    "versionCode": 1702000,
+    "versionName": "1.7.3",
+    "buildVersion": "3",
+    "icon": "$media:layered_image",
+    "label": "$string:app_name"
+  }
+}

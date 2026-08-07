@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "validator.schema.json",
+  "title": "ValidatorSpec",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "name",
+    "type",
+    "risk_ceiling",
+    "checks",
+    "implementation_status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "risk_ceiling": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1
+    },
+    "implementation_status": {
+      "enum": [
+        "spec_only",
+        "implemented",
+        "validated"
+      ]
+    }
+  }
+}

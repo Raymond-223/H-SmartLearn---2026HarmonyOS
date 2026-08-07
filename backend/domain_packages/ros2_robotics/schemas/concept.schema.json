@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "concept.schema.json",
+  "title": "Concept",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "name",
+    "skill_id",
+    "difficulty",
+    "risk_level",
+    "importance",
+    "prerequisite_concept_ids"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "skill_id": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "risk_level": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "importance": {
+      "enum": [
+        "core",
+        "support",
+        "extension"
+      ]
+    },
+    "prerequisite_concept_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "merge_base": "Agent60 enhanced",
+  "knowledge_base": "ProofGraph KB2.1",
+  "integration_contract": "2.1-agent60",
+  "files": {
+    "backend/app/agents/retrieval_agent.py": "da8d35b3451e2884399f7137d3646280fdb0bc9dd58ab597adc4106eff8be5dd",
+    "backend/app/agents/review_agent.py": "46e5be39e628ef6cb0d7e9b0b6197a2ee08da67d3a87c9938dd2d9c045532b93",
+    "backend/app/agents/generation_agent.py": "0647b51ce2707012af7210d1339719d10c00cfff9ca2d1071eb61e0385a95dfc",
+    "backend/app/services/domain_package_service.py": "069e788bf2f0d54a4b1d00787c47eda885c0efc69ab2ef08edad42ed3a8b4f7e",
+    "backend/app/services/graph_expansion_service.py": "06dc4f4b1b3bceedc211cbc2ea6670688d54ba4b91ebc7a7e58bbf548fb65e58",
+    "backend/app/core/database.py": "ca63734389fdbaf04f3cb3fc98b2dce69f220401e6f43b14136e3dc33e199679",
+    "backend/app/api/knowledge.py": "d6884a1f245e2e9b2bdf1046678ce9b1130d145bbb3cff1c925e9e47a0cecbc9",
+    "backend/app/api/workflows.py": "8ca274a99296216a8c55ba9ec20f890b1b28e4fcfce824f3a9577d1764be816a",
+    "backend/app/workflow/state.py": "a5992c64b506361b74e3f217b33d5ac61f591f0c9d69bfcf31fd20c32fd5e295",
+    "backend/app/workflow/orchestrator.py": "860a4af7636abd3d8a427e815e24bcc7ee37a8a8e8e7719a888639290e66ec7c",
+    "entry/src/main/ets/service/ApiService.ets": "29a7d26f46e35f0ed51af27900e3c8105b4a9f8659025a091b89286a75e4e29f",
+    "entry/src/main/ets/service/DemoBackend.ets": "b9b37c772c54f90403225ffa46d14b594035796d49e3efa3b8a12a9bab502ac8",
+    "backend/domain_packages/ros2_robotics/knowledge_data_manifest.json": "30d82003203fb4f14b5a198f4d0c1e9f72d7b5ddd857f8ba1efe19e026b3974c"
+  }
+}

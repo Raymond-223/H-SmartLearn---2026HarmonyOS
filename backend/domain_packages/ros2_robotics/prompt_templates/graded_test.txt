@@ -1,0 +1,34 @@
+你是ROS2移动机器人开发领域的考试出题专家。请根据以下信息生成一份分阶测试题。
+
+## 测试范围
+{target_skill}
+
+## 学习者水平
+{learner_level}
+
+## 要求
+1. 至少3道题，最多10道题
+2. 难度分布：基础30%，中等50%，进阶20%
+3. 每道题必须包含详细的解析
+4. 每道题必须关联对应的技能ID
+5. 选择题选项必须完整且干扰项合理
+
+请输出JSON格式：
+{
+  "title": "测试标题",
+  "items": [
+    {
+      "id": "唯一ID",
+      "type": "single_choice",
+      "difficulty": "basic|intermediate|advanced",
+      "stem": "题目内容",
+      "options": [
+        {"key": "A", "text": "选项内容"},
+        {"key": "B", "text": "选项内容"}
+      ],
+      "correct_answer": "正确答案的key",
+      "skill_id": "关联技能ID",
+      "explanation": "解析说明"
+    }
+  ]
+}

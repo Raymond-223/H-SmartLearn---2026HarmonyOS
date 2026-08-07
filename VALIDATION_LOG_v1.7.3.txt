@@ -1,0 +1,13 @@
+H-SmartLearn v1.7.3 validation log
+=== structural validation ===
+{"status": "passed", "ets_files": 25, "registered_pages": 10, "button_contracts": 69, "interaction_contracts": ["diagnostic", "resource_test", "practice", "profile", "demo"]}
+=== backend tests ===
+........                                                                 [100%]
+8 passed in 1.75s
+=== python compile ===
+python compile: passed
+=== compiler-error-pattern scan ===
+Row.minHeight occurrences: 0
+Hyperlink.fontSize occurrences: 0
+AlertDialog.show occurrences: 0
+global animateTo occurrences: 0

@@ -1,0 +1,47 @@
+[
+  {
+    "from": "c_basic",
+    "to": "c_variable",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "c_variable",
+    "to": "c_datatype",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "c_datatype",
+    "to": "c_operator",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "c_operator",
+    "to": "c_control",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "c_control",
+    "to": "c_if",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "c_if",
+    "to": "c_loop",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "c_loop",
+    "to": "c_array",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "c_array",
+    "to": "c_function",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "c_function",
+    "to": "c_pointer",
+    "relation": "prerequisite"
+  }
+]

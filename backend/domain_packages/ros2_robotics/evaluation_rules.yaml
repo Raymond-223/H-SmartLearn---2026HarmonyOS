@@ -1,0 +1,53 @@
+# Evaluation rules for generated resources
+rules:
+  # Lecture rules
+  lecture:
+    min_sections: 2
+    max_sections: 8
+    required_fields:
+      - title
+      - sections
+    section_required_fields:
+      - heading
+      - content
+    must_have_citations: true
+    difficulty_rules:
+      basic:
+        max_technical_depth: 2
+        require_analogies: true
+      intermediate:
+        max_technical_depth: 4
+        require_code_examples: true
+
+  # Practice guide rules
+  practice_guide:
+    min_steps: 2
+    max_steps: 15
+    required_fields:
+      - title
+      - steps
+    step_required_fields:
+      - order
+      - title
+      - command
+      - expected_result
+    safety_notes_required: true
+    version_check_required: true  # Commands must specify ROS2 version
+
+  # Graded test rules
+  graded_test:
+    min_items: 3
+    max_items: 20
+    required_fields:
+      - title
+      - items
+    item_required_fields:
+      - stem
+      - options
+      - correct_answer
+      - explanation
+      - skill_id
+    difficulty_distribution:
+      basic: 0.3  # 30% basic
+      intermediate: 0.5  # 50% intermediate
+      advanced: 0.2  # 20% advanced

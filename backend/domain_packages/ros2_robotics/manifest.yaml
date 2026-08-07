@@ -1,0 +1,32 @@
+domain_id: ros2_robotics
+name: ROS2移动机器人开发
+version: 2.0.0
+supported_ros_versions:
+- humble
+default_target_roles:
+- ROS2初级开发工程师
+- 移动机器人导航工程师
+allowed_source_domains:
+- docs.nav2.org
+- docs.ros.org
+- index.ros.org
+- robotics.stackexchange.com
+required_resource_types:
+- lecture
+- practice_guide
+- graded_test
+default_language: zh-CN
+data_contract_version: '2.0'
+knowledge_files:
+  evidence: knowledge_documents/ros2_knowledge_300.json
+  concept_nodes: concept_nodes.json
+  concept_edges: concept_edges.json
+  assessment: assessment_bank.jsonl
+  procedures: practice_tasks.jsonl
+  validator_registry: validator_registry.json
+  human_review_queue: human_review_queue.jsonl
+  retrieval_benchmark_seed: retrieval_benchmark_seed.jsonl
+  schemas: schemas/
+verification_policy:
+  trusted_source: 白名单可信来源且结构化整理完成，但尚未人工逐条签署
+  verified: 完成来源定位人工复核，且高风险项满足规则/沙箱/人工验证要求
