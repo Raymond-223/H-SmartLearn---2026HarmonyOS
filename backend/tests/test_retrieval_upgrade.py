@@ -214,7 +214,14 @@ async def test_agent():
     r = await agent.run(ctx, {})
     evidence = r.output['evidence_list']
     check("7a. has evidence", len(evidence) > 0)
-    check("7b. max 8 items", len(evidence) <= 8)
+    # TOP_K bounds the *ranked* head; the agent also pins the evidence the
+    # packaged practice task and graded-test items cite, so review can verify
+    # those citations instead of rejecting them as nonexistent.
+    from app.agents.retrieval_agent import _cited_evidence_ids
+    pinned = _cited_evidence_ids(ctx.domain_id, list(ctx.target_skills))
+    check("7b. ranked head bounded by TOP_K", len(evidence) <= 8 + len(pinned))
+    check("7b2. packaged citations retrievable",
+          pinned <= {item['evidence_id'] for item in evidence})
     check("7c. MMR applied", r.output['mmr_applied'] == True)
     check("7d. graph expansion applied", r.output['graph_expansion_applied'] == True)
     check("7e. method is bm25", 'bm25' in r.output['retrieval_method'])

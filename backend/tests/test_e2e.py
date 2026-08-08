@@ -10,6 +10,31 @@ from app.models.resource import GeneratedResource
 from app.core.database import init_db, async_session_factory
 
 
+def bank_answer_key(domain_id: str) -> dict[str, str]:
+    """id -> correct option, read from the packaged bank.
+
+    Derived rather than hardcoded: the bank grows, and a fixed map silently
+    breaks the moment the sampler picks an item that was not in it.
+    """
+    from app.services.domain_package_service import load_assessment_bank
+    return {str(item["id"]): str(item["correct_answer"]) for item in load_assessment_bank(domain_id)}
+
+
+def mixed_answers(items: list[dict], answer_key: dict[str, str]) -> list[dict]:
+    """Answer every other item correctly so mastery lands mid-range, not 0 or 100."""
+    answers = []
+    for index, item in enumerate(items):
+        correct = answer_key[item["item_id"]]
+        options = [str(option["key"]) for option in item.get("options", [])]
+        wrong = next((option for option in options if option != correct), correct)
+        answers.append({
+            "item_id": item["item_id"],
+            "answer": correct if index % 2 == 0 else wrong,
+            "duration_seconds": 20,
+        })
+    return answers
+
+
 async def private_test_answers(resource_id: str) -> dict[str, str]:
     async with async_session_factory() as db:
         resource = await db.get(GeneratedResource, resource_id)
@@ -33,16 +58,7 @@ async def test_complete_learning_loop():
             "target_goal": "掌握ROS2 Topic通信",
         })).json()
         assert len(assessment["items"]) == 10
-        ros_answers = {
-            "ros_q_001": "A", "ros_q_002": "A", "ros_q_003": "A", "ros_q_004": "B",
-            "ros_q_005": "B", "ros_q_006": "B", "ros_q_007": "A", "ros_q_008": "A",
-            "ros_q_009": "A", "ros_q_010": "A",
-        }
-        answers = [{
-            "item_id": item["item_id"],
-            "answer": ros_answers[item["item_id"]],
-            "duration_seconds": 20,
-        } for item in assessment["items"]]
+        answers = mixed_answers(assessment["items"], bank_answer_key("ros2_robotics"))
         partial = await client.post(
             f"/api/v1/assessments/{assessment['assessment_id']}/submit",
             json={"answers": answers[:-1]},
@@ -118,19 +134,9 @@ async def test_complete_learning_loop():
             "target_goal": "掌握C语言基础与指针",
         })).json()
         assert len(c_assessment["items"]) == 10
-        c_answers = {
-            "c_q_001": "B", "c_q_002": "B", "c_q_003": "A", "c_q_004": "A",
-            "c_q_005": "B", "c_q_006": "A", "c_q_007": "A", "c_q_008": "C",
-            "c_q_009": "A", "c_q_010": "B",
-        }
         await client.post(
             f"/api/v1/assessments/{c_assessment['assessment_id']}/submit",
-            json={
-                "answers": [{
-                    "item_id": item["item_id"], "answer": c_answers[item["item_id"]],
-                    "duration_seconds": 18,
-                } for item in c_assessment["items"]],
-            },
+            json={"answers": mixed_answers(c_assessment["items"], bank_answer_key("c_programming"))},
         )
         c_workflow = (await client.post("/api/v1/workflows", json={
             "learner_id": learner_id, "domain_id": "c_programming",

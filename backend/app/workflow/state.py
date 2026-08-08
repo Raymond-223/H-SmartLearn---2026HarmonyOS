@@ -17,6 +17,16 @@ class WorkflowState:
     target_skills: list[str] = field(default_factory=list)
     learning_path: list[dict] = field(default_factory=list)
 
+    # Beta-Bernoulli learner model. `mastery_state` above is the legacy 0-100
+    # per-skill view kept for the existing dashboard; these carry the per-concept
+    # posterior — probability *and* uncertainty — that the planner reads.
+    learner_state: Optional[dict] = None
+    diagnosis_mode: str = "auto"
+    diagnosis_session_id: Optional[str] = None
+    mastery_summary: Optional[dict] = None
+    weak_concepts: list[dict] = field(default_factory=list)
+    uncertain_concepts: list[dict] = field(default_factory=list)
+
     search_query: Optional[str] = None
     evidence_list: list[dict] = field(default_factory=list)
 

@@ -11,7 +11,7 @@ from app.core.config import settings
 from app.core.database import get_db, async_session_factory
 from app.schemas.workflow import (
     WorkflowCreate, WorkflowCreateResponse, WorkflowStatus as WorkflowStatusSchema,
-    WorkflowTrace, AgentTraceItem, WorkflowSnapshot,
+    WorkflowTrace, AgentTraceItem, WorkflowSnapshot, WorkflowLearnerState,
 )
 from app.workflow.orchestrator import Orchestrator
 from app.workflow.transitions import WorkflowStatus
@@ -23,11 +23,15 @@ from app.agents.generation_agent import GenerationAgent
 from app.agents.review_agent import ReviewAgent
 from app.models.workflow import WorkflowSession, AgentRun
 from app.models.resource import GeneratedResource, ReviewRecord
+from app.services.learner_model_service import LearnerModelService
 
 router = APIRouter(prefix="/api/v1/workflows", tags=["workflows"])
 
 STATE_AGENT = {
     WorkflowStatus.DIAGNOSING.value: "diagnosis_agent",
+    WorkflowStatus.DIAGNOSIS_QUESTIONING.value: "diagnosis_agent",
+    WorkflowStatus.LEARNER_MODEL_UPDATING.value: "diagnosis_agent",
+    WorkflowStatus.DIAGNOSIS_COMPLETED.value: "diagnosis_agent",
     WorkflowStatus.PATH_PLANNING.value: "planner_agent",
     WorkflowStatus.RETRIEVING.value: "retrieval_agent",
     WorkflowStatus.GENERATING.value: "generation_agent",
@@ -40,6 +44,11 @@ BASE_PROGRESS = {
     WorkflowStatus.PROFILE_READY.value: 5,
     WorkflowStatus.ASSESSMENT_COMPLETED.value: 10,
     WorkflowStatus.DIAGNOSING.value: 20,
+    # The questioning/updating pair loops; progress stays flat across the loop so
+    # it never runs backwards when the learner answers another item.
+    WorkflowStatus.DIAGNOSIS_QUESTIONING.value: 24,
+    WorkflowStatus.LEARNER_MODEL_UPDATING.value: 27,
+    WorkflowStatus.DIAGNOSIS_COMPLETED.value: 30,
     WorkflowStatus.PATH_PLANNING.value: 35,
     WorkflowStatus.RETRIEVING.value: 52,
     WorkflowStatus.GENERATING.value: 70,
@@ -74,6 +83,20 @@ def _status_schema(session: WorkflowSession) -> WorkflowStatusSchema:
     )
 
 
+def _learner_schema(session: WorkflowSession) -> WorkflowLearnerState | None:
+    """Expose the Beta-Bernoulli slice of workflow state, when diagnosis produced one."""
+    state = session.state_data or {}
+    if not any(state.get(key) for key in ("learner_state", "mastery_summary", "diagnosis_session_id")):
+        return None
+    return WorkflowLearnerState(
+        learner_state=state.get("learner_state"),
+        diagnosis_session_id=state.get("diagnosis_session_id"),
+        mastery_summary=state.get("mastery_summary"),
+        weak_concepts=state.get("weak_concepts") or [],
+        uncertain_concepts=state.get("uncertain_concepts") or [],
+    )
+
+
 @router.post("", response_model=WorkflowCreateResponse, status_code=202)
 async def create_workflow(
     data: WorkflowCreate,
@@ -89,6 +112,7 @@ async def create_workflow(
             assessment_id=data.assessment_id,
             target_skill_id=data.target_skill_id,
             version_filter=data.version_filter,
+            diagnosis_mode=data.diagnosis_mode,
         )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
@@ -171,6 +195,7 @@ async def get_workflow_snapshot(workflow_id: str, db: AsyncSession = Depends(get
     return WorkflowSnapshot(
         status=_status_schema(session),
         trace=WorkflowTrace(runs=[AgentTraceItem(**item) for item in runs]),
+        learner=_learner_schema(session),
     )
 
 
@@ -233,117 +258,170 @@ async def run_workflow_task(workflow_id: str) -> None:
         if session.current_state != WorkflowStatus.ASSESSMENT_COMPLETED.value:
             return
         try:
-            pipeline = [
-                (WorkflowStatus.DIAGNOSING, "diagnosis_agent", DiagnosisAgent()),
-                (WorkflowStatus.PATH_PLANNING, "planner_agent", PlannerAgent()),
-                (WorkflowStatus.RETRIEVING, "retrieval_agent", RetrievalAgent()),
-                (WorkflowStatus.GENERATING, "generation_agent", GenerationAgent()),
-                (WorkflowStatus.REVIEWING, "review_agent", ReviewAgent()),
-            ]
-            review_result = None
-            for next_state, agent_name, agent in pipeline:
-                await orchestrator.transition_to(session, next_state)
-                await db.commit()
-                await _pause()
-                review_result = await orchestrator.run_agent(session, agent_name, agent.run, {})
-                await db.commit()
-                await _pause()
+            await orchestrator.transition_to(session, WorkflowStatus.DIAGNOSING)
+            await db.commit()
+            await _pause()
 
-            decision = (review_result or {}).get("output", {}).get("decision", "reject")
-            while decision == "revise" and session.revision_count < settings.max_revision_count:
-                revision_instructions = (review_result or {}).get("output", {}).get("revision_instructions", [])
-                await orchestrator.transition_to(session, WorkflowStatus.REVISING)
-                state = dict(session.state_data or {})
-                session.revision_count += 1
-                state["revision_count"] = session.revision_count
-                session.state_data = state
-                await db.commit()
-
-                await orchestrator.run_agent(
-                    session,
-                    "generation_agent",
-                    GenerationAgent().run,
-                    {"revision_instructions": revision_instructions},
-                )
-                await db.commit()
-                await _pause()
-
-                await orchestrator.transition_to(session, WorkflowStatus.REVIEWING)
-                await db.commit()
-                review_result = await orchestrator.run_agent(session, "review_agent", ReviewAgent().run, {})
-                await db.commit()
-                decision = review_result.get("output", {}).get("decision", "reject")
-
-            if decision != "approve":
-                state = dict(session.state_data or {})
-                issues = (review_result or {}).get("output", {}).get("issues", [])
-                state["error_message"] = "自动审核未通过：" + (
-                    "；".join(str(item) for item in issues) if issues else "资源未达到发布标准"
-                )
-                state["final_decision"] = "retry_required"
-                session.state_data = state
-                await orchestrator.transition_to(session, WorkflowStatus.FAILED)
+            if (session.state_data or {}).get("diagnosis_mode") == "adaptive":
+                # Hand control to the learner: the pipeline cannot invent answers,
+                # so it parks here and `resume_workflow_task` picks it up once the
+                # interactive /diagnosis session has finished.
+                await orchestrator.transition_to(session, WorkflowStatus.DIAGNOSIS_QUESTIONING)
                 await db.commit()
                 return
 
-            state = dict(session.state_data or {})
-            generated = state.get("generated_resources") or {}
-            review = state.get("review_result") or {}
-            generation_run = (await db.execute(
-                select(AgentRun)
-                .where(AgentRun.workflow_id == workflow_id, AgentRun.agent_type == "generation_agent")
-                .order_by(AgentRun.started_at.desc())
-                .limit(1)
-            )).scalar_one_or_none()
-            generation_output = (generation_run.output_json or {}).get("output", {}) if generation_run else {}
-            citations = []
-            evidence_map = {item.get("evidence_id"): item for item in state.get("evidence_list", [])}
-            for evidence_id in generation_output.get("citations", []):
-                evidence = evidence_map.get(evidence_id, {})
-                citations.append({
-                    "evidence_id": evidence_id,
-                    "title": evidence.get("title", ""),
-                    "source_url": evidence.get("source_url", ""),
-                    "source_type": evidence.get("source_type", "local"),
-                    "verification_status": evidence.get("verification_status", "pending"),
-                })
-
-            metadata = generation_output.get("metadata", {})
-            resource = GeneratedResource(
-                workflow_id=workflow_id,
-                resource_type="bundle",
-                skill_id=generation_output.get("target_skill", "ros2_topic"),
-                difficulty=generation_output.get("difficulty", "basic"),
-                content_json={"resources": generated, "citations": citations, "review": review, "metadata": metadata},
-                model_name=metadata.get("model_version", "deterministic-template-v2"),
-                prompt_version=metadata.get("prompt_version", "resource-generation-2.0"),
-                status="published",
-            )
-            db.add(resource)
-            await db.flush()
-            scores = review.get("scores", {})
-            db.add(ReviewRecord(
-                resource_id=resource.id,
-                review_round=max(1, session.revision_count + 1),
-                factuality_score=scores.get("factuality"),
-                coverage_score=scores.get("evidence_coverage"),
-                difficulty_score=scores.get("difficulty_match"),
-                actionability_score=scores.get("actionability"),
-                decision="approve",
-                issues_json=review.get("issues", []),
-                revision_instructions=review.get("revision_instructions", []),
-            ))
-            state["resource_id"] = resource.id
-            state["final_decision"] = "published"
-            session.state_data = state
-            await orchestrator.transition_to(session, WorkflowStatus.PUBLISHED)
-            await db.commit()
+            await _run_diagnosis_agent(db, orchestrator, session)
+            await _run_generation_pipeline(db, orchestrator, session)
         except Exception as exc:
-            await db.rollback()
-            session = await db.get(WorkflowSession, workflow_id)
-            if session is not None:
-                session.current_state = WorkflowStatus.FAILED.value
-                state = dict(session.state_data or {})
-                state["error_message"] = str(exc)
-                session.state_data = state
-                await db.commit()
+            await _fail_workflow(db, workflow_id, exc)
+
+
+async def resume_workflow_task(workflow_id: str) -> None:
+    """Continue an adaptive workflow once its diagnosis session has completed."""
+    async with async_session_factory() as db:
+        orchestrator = Orchestrator(db)
+        session = await orchestrator.get_workflow(workflow_id)
+        if session is None or session.current_state != WorkflowStatus.DIAGNOSIS_COMPLETED.value:
+            return
+        try:
+            await _run_diagnosis_agent(db, orchestrator, session)
+            await _run_generation_pipeline(db, orchestrator, session)
+        except Exception as exc:
+            await _fail_workflow(db, workflow_id, exc)
+
+
+async def _run_diagnosis_agent(
+    db: AsyncSession,
+    orchestrator: Orchestrator,
+    session: WorkflowSession,
+) -> None:
+    """Turn the learner model into workflow state and a human-readable summary."""
+    agent = DiagnosisAgent(LearnerModelService(db, domain_id=session.domain_id))
+    await orchestrator.run_agent(session, "diagnosis_agent", agent.run, {})
+    await db.commit()
+    await _pause()
+
+
+async def _fail_workflow(db: AsyncSession, workflow_id: str, exc: Exception) -> None:
+    await db.rollback()
+    session = await db.get(WorkflowSession, workflow_id)
+    if session is None:
+        return
+    session.current_state = WorkflowStatus.FAILED.value
+    state = dict(session.state_data or {})
+    state["error_message"] = str(exc)
+    session.state_data = state
+    await db.commit()
+
+
+async def _run_generation_pipeline(
+    db: AsyncSession,
+    orchestrator: Orchestrator,
+    session: WorkflowSession,
+) -> None:
+    """Everything after diagnosis: plan, retrieve, generate, review, publish."""
+    workflow_id = session.id
+    pipeline = [
+        (WorkflowStatus.PATH_PLANNING, "planner_agent", PlannerAgent()),
+        (WorkflowStatus.RETRIEVING, "retrieval_agent", RetrievalAgent()),
+        (WorkflowStatus.GENERATING, "generation_agent", GenerationAgent()),
+        (WorkflowStatus.REVIEWING, "review_agent", ReviewAgent()),
+    ]
+    review_result = None
+    for next_state, agent_name, agent in pipeline:
+        await orchestrator.transition_to(session, next_state)
+        await db.commit()
+        await _pause()
+        review_result = await orchestrator.run_agent(session, agent_name, agent.run, {})
+        await db.commit()
+        await _pause()
+
+    decision = (review_result or {}).get("output", {}).get("decision", "reject")
+    while decision == "revise" and session.revision_count < settings.max_revision_count:
+        revision_instructions = (review_result or {}).get("output", {}).get("revision_instructions", [])
+        await orchestrator.transition_to(session, WorkflowStatus.REVISING)
+        state = dict(session.state_data or {})
+        session.revision_count += 1
+        state["revision_count"] = session.revision_count
+        session.state_data = state
+        await db.commit()
+
+        await orchestrator.run_agent(
+            session,
+            "generation_agent",
+            GenerationAgent().run,
+            {"revision_instructions": revision_instructions},
+        )
+        await db.commit()
+        await _pause()
+
+        await orchestrator.transition_to(session, WorkflowStatus.REVIEWING)
+        await db.commit()
+        review_result = await orchestrator.run_agent(session, "review_agent", ReviewAgent().run, {})
+        await db.commit()
+        decision = review_result.get("output", {}).get("decision", "reject")
+
+    if decision != "approve":
+        state = dict(session.state_data or {})
+        issues = (review_result or {}).get("output", {}).get("issues", [])
+        state["error_message"] = "自动审核未通过：" + (
+            "；".join(str(item) for item in issues) if issues else "资源未达到发布标准"
+        )
+        state["final_decision"] = "retry_required"
+        session.state_data = state
+        await orchestrator.transition_to(session, WorkflowStatus.FAILED)
+        await db.commit()
+        return
+
+    state = dict(session.state_data or {})
+    generated = state.get("generated_resources") or {}
+    review = state.get("review_result") or {}
+    generation_run = (await db.execute(
+        select(AgentRun)
+        .where(AgentRun.workflow_id == workflow_id, AgentRun.agent_type == "generation_agent")
+        .order_by(AgentRun.started_at.desc())
+        .limit(1)
+    )).scalar_one_or_none()
+    generation_output = (generation_run.output_json or {}).get("output", {}) if generation_run else {}
+    citations = []
+    evidence_map = {item.get("evidence_id"): item for item in state.get("evidence_list", [])}
+    for evidence_id in generation_output.get("citations", []):
+        evidence = evidence_map.get(evidence_id, {})
+        citations.append({
+            "evidence_id": evidence_id,
+            "title": evidence.get("title", ""),
+            "source_url": evidence.get("source_url", ""),
+            "source_type": evidence.get("source_type", "local"),
+            "verification_status": evidence.get("verification_status", "pending"),
+        })
+
+    metadata = generation_output.get("metadata", {})
+    resource = GeneratedResource(
+        workflow_id=workflow_id,
+        resource_type="bundle",
+        skill_id=generation_output.get("target_skill", "ros2_topic"),
+        difficulty=generation_output.get("difficulty", "basic"),
+        content_json={"resources": generated, "citations": citations, "review": review, "metadata": metadata},
+        model_name=metadata.get("model_version", "deterministic-template-v2"),
+        prompt_version=metadata.get("prompt_version", "resource-generation-2.0"),
+        status="published",
+    )
+    db.add(resource)
+    await db.flush()
+    scores = review.get("scores", {})
+    db.add(ReviewRecord(
+        resource_id=resource.id,
+        review_round=max(1, session.revision_count + 1),
+        factuality_score=scores.get("factuality"),
+        coverage_score=scores.get("evidence_coverage"),
+        difficulty_score=scores.get("difficulty_match"),
+        actionability_score=scores.get("actionability"),
+        decision="approve",
+        issues_json=review.get("issues", []),
+        revision_instructions=review.get("revision_instructions", []),
+    ))
+    state["resource_id"] = resource.id
+    state["final_decision"] = "published"
+    session.state_data = state
+    await orchestrator.transition_to(session, WorkflowStatus.PUBLISHED)
+    await db.commit()

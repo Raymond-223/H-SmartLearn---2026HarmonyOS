@@ -7,6 +7,51 @@ import { LogUtil } from '../utils/LogUtil';
 import { DataStore } from '../business/DataStore';
 import { DemoBackend } from './DemoBackend';
 import { WorkflowStatus } from './WorkflowStatus';
+import {
+  AbilityProfile,
+  ConceptMastery,
+  DiagnosisAnswerRequest,
+  DiagnosisAnswerResponse,
+  DiagnosisConceptDelta,
+  DiagnosisFatigueState,
+  DiagnosisItem,
+  DiagnosisItemResult,
+  DiagnosisNextResponse,
+  DiagnosisOption,
+  DiagnosisResult,
+  DiagnosisSession,
+  DiagnosisStartRequest,
+  DiagnosisStartResponse,
+  LearnerMasteryQuery,
+  LearnerMasteryResponse,
+  SkillMastery,
+  WeakConceptQuery,
+  WeakConceptResponse,
+} from './DiagnosisTypes';
+
+// Diagnosis payload shapes live in DiagnosisTypes.ets, but callers have always
+// imported every wire type from ApiService. Re-export so pages need one import.
+export {
+  AbilityProfile,
+  ConceptMastery,
+  DiagnosisAnswerRequest,
+  DiagnosisAnswerResponse,
+  DiagnosisConceptDelta,
+  DiagnosisFatigueState,
+  DiagnosisItem,
+  DiagnosisItemResult,
+  DiagnosisNextResponse,
+  DiagnosisOption,
+  DiagnosisResult,
+  DiagnosisSession,
+  DiagnosisStartRequest,
+  DiagnosisStartResponse,
+  LearnerMasteryQuery,
+  LearnerMasteryResponse,
+  SkillMastery,
+  WeakConceptQuery,
+  WeakConceptResponse,
+};
 
 const TAG: string = 'ApiService';
 const DEFAULT_BASE_URL: string = 'http://10.0.2.2:8000';
@@ -559,6 +604,71 @@ export class ApiService {
   async getLearnerReport(learnerId: string, domainId?: string): Promise<LearnerReportData> {
     const query: string = domainId ? `?domain_id=${encodeURIComponent(domainId)}` : '';
     return await this.get(`/api/v1/learners/${learnerId}/report${query}`) as LearnerReportData;
+  }
+
+  /**
+   * Open an adaptive diagnosis session and receive its first item.
+   *
+   * `workflow_id` is optional but load-bearing: a workflow started in adaptive
+   * mode parks at DIAGNOSIS_QUESTIONING and only resumes once the session it
+   * is linked to stops, so a session started without it leaves that workflow
+   * waiting forever.
+   */
+  async startDiagnosis(data: DiagnosisStartRequest): Promise<DiagnosisStartResponse> {
+    return await this.post('/api/v1/diagnosis/start', data) as DiagnosisStartResponse;
+  }
+
+  /**
+   * Submit one answer. The response carries the grading, how the posterior
+   * moved, and the next item — no separate fetch is needed while the session
+   * is running. When `finished` is true, `result` is the terminal report.
+   */
+  async submitDiagnosisAnswer(sessionId: string, data: DiagnosisAnswerRequest): Promise<DiagnosisAnswerResponse> {
+    return await this.post(`/api/v1/diagnosis/${sessionId}/answer`, data) as DiagnosisAnswerResponse;
+  }
+
+  /** Re-read the currently open item. Idempotent — safe after a UI restart. */
+  async getNextDiagnosisItem(sessionId: string): Promise<DiagnosisNextResponse> {
+    return await this.get(`/api/v1/diagnosis/${sessionId}/next`) as DiagnosisNextResponse;
+  }
+
+  async getDiagnosisResult(sessionId: string): Promise<DiagnosisResult> {
+    return await this.get(`/api/v1/diagnosis/${sessionId}/result`) as DiagnosisResult;
+  }
+
+  async getDiagnosisSession(sessionId: string): Promise<DiagnosisSession> {
+    return await this.get(`/api/v1/diagnosis/${sessionId}`) as DiagnosisSession;
+  }
+
+  async getLearnerMastery(learnerId: string, query?: LearnerMasteryQuery): Promise<LearnerMasteryResponse> {
+    const params: string[] = [`domain_id=${encodeURIComponent(query?.domainId || 'ros2_robotics')}`];
+    if (query?.skillId) {
+      params.push(`skill_id=${encodeURIComponent(query.skillId)}`);
+    }
+    if (query?.testedOnly) {
+      params.push('tested_only=true');
+    }
+    return await this.get(`/api/v1/learners/${learnerId}/mastery?${params.join('&')}`) as LearnerMasteryResponse;
+  }
+
+  async getLearnerWeakConcepts(learnerId: string, query?: WeakConceptQuery): Promise<WeakConceptResponse> {
+    const params: string[] = [`domain_id=${encodeURIComponent(query?.domainId || 'ros2_robotics')}`];
+    if (query?.skillId) {
+      params.push(`skill_id=${encodeURIComponent(query.skillId)}`);
+    }
+    if (query?.threshold !== undefined) {
+      params.push(`threshold=${query.threshold}`);
+    }
+    if (query?.limit !== undefined) {
+      params.push(`limit=${query.limit}`);
+    }
+    return await this.get(`/api/v1/learners/${learnerId}/weak-concepts?${params.join('&')}`) as WeakConceptResponse;
+  }
+
+  async getLearnerAbilityProfile(learnerId: string, domainId: string = 'ros2_robotics'): Promise<AbilityProfile> {
+    return await this.get(
+      `/api/v1/learners/${learnerId}/ability-profile?domain_id=${encodeURIComponent(domainId)}`
+    ) as AbilityProfile;
   }
 
   async createAssessment(data: AssessmentCreateRequest): Promise<AssessmentCreateResponse> {

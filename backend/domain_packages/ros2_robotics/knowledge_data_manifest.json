@@ -6,7 +6,7 @@
   "knowledge_evidence_count": 300,
   "unique_claim_count": 300,
   "concept_count": 50,
-  "assessment_count": 30,
+  "assessment_count": 120,
   "practice_task_count": 20,
   "validator_spec_count": 10,
   "benchmark_seed_count": 100,
@@ -21,7 +21,7 @@
     "300条证据尚未完成人工逐条签署；human_review_queue.jsonl已生成。",
     "source_locator目前多数为section_hint，不是人工确认的精确锚点。",
     "validator_registry当前为spec_only，尚未接入真实沙箱。",
-    "30道诊断题不足以稳定估计IRT参数，需扩大题库并积累真实作答。",
+    "题库已扩展至120题（每技能12题、覆盖全部50个concept），可支撑Beta-Bernoulli自适应诊断；但仍不足以稳定估计IRT参数，difficulty为人工标注先验而非实测。",
     "retrieval_benchmark_seed是种子集，不是冻结人工金标，不能据此宣称Recall@10达标。",
     "知识库当前集中于Humble，缺少跨版本冲突对照集。"
   ]

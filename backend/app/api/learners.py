@@ -12,6 +12,11 @@ from app.schemas.learner import (
     LearnerDetail,
     LearnerReport,
 )
+from app.schemas.learner_model import (
+    AbilityProfile,
+    LearnerMasteryResponse,
+    WeakConceptResponse,
+)
 from app.models.learner import LearnerProfile
 from app.models.assessment import AssessmentSession, MasteryState
 from app.models.feedback import FeedbackRecord
@@ -19,6 +24,7 @@ from app.models.resource import GeneratedResource
 from app.models.workflow import WorkflowSession
 from app.models.skill_graph import SkillNode
 from app.services.domain_package_service import topological_path
+from app.services.learner_model_service import WEAK_MASTERY_THRESHOLD, LearnerModelService
 
 router = APIRouter(prefix="/api/v1/learners", tags=["learners"])
 
@@ -31,6 +37,7 @@ async def create_learner(data: LearnerCreate, db: AsyncSession = Depends(get_db)
         target_role=data.target_role,
         weekly_hours=data.weekly_hours,
         preference_json=data.preferences,
+        context=data.context,
     )
     db.add(profile)
     await db.flush()
@@ -45,6 +52,11 @@ def _learner_detail(profile: LearnerProfile) -> LearnerDetail:
         target_role=profile.target_role,
         weekly_hours=profile.weekly_hours,
         preferences=profile.preference_json or {},
+        context=profile.context or {},
+        ability_profile=profile.ability_profile,
+        uncertainty=profile.uncertainty,
+        misconceptions=list(profile.misconceptions or []),
+        last_diagnosed_at=profile.last_diagnosed_at,
     )
 
 
@@ -73,12 +85,101 @@ async def update_learner(
         "target_role": "target_role",
         "weekly_hours": "weekly_hours",
         "preferences": "preference_json",
+        "context": "context",
     }
     for source, target in field_map.items():
         if source in updates:
             setattr(profile, target, updates[source])
     await db.flush()
     return _learner_detail(profile)
+
+
+# ------------------------------------------------------- Beta-Bernoulli views
+#
+# These three read the per-concept posterior maintained by LearnerModelService.
+# They are deliberately separate from /report, which still speaks the legacy
+# 0-100 MasteryState language the existing dashboard renders.
+
+
+async def _learner_model(
+    db: AsyncSession,
+    learner_id: str,
+    domain_id: str,
+) -> LearnerModelService:
+    if await db.get(LearnerProfile, learner_id) is None:
+        raise HTTPException(status_code=404, detail="Learner not found")
+    return LearnerModelService(db, domain_id=domain_id)
+
+
+@router.get("/{learner_id}/mastery", response_model=LearnerMasteryResponse)
+async def get_learner_mastery(
+    learner_id: str,
+    domain_id: str = Query(default="ros2_robotics"),
+    skill_id: str | None = Query(default=None),
+    tested_only: bool = Query(default=False),
+    db: AsyncSession = Depends(get_db),
+):
+    """Per-concept and per-skill posteriors, optionally scoped to one skill."""
+    service = await _learner_model(db, learner_id, domain_id)
+    profile = await service.get_ability_profile(learner_id)
+
+    skill_states = profile["skill_states"]
+    if skill_id is not None:
+        skill_states = [state for state in skill_states if state["skill_id"] == skill_id]
+        if not skill_states:
+            raise HTTPException(status_code=404, detail="Skill not found in domain")
+
+    concept_states = [
+        concept
+        for state in skill_states
+        for concept in state["concepts"]
+        if not tested_only or concept["attempt_count"] > 0
+    ]
+    return LearnerMasteryResponse(
+        learner_id=learner_id,
+        domain_id=domain_id,
+        overall_mastery=profile["overall_mastery"],
+        overall_uncertainty=profile["overall_uncertainty"],
+        skill_states=skill_states,
+        concept_states=concept_states,
+    )
+
+
+@router.get("/{learner_id}/weak-concepts", response_model=WeakConceptResponse)
+async def get_learner_weak_concepts(
+    learner_id: str,
+    domain_id: str = Query(default="ros2_robotics"),
+    skill_id: str | None = Query(default=None),
+    threshold: float = Query(default=WEAK_MASTERY_THRESHOLD, ge=0.0, le=1.0),
+    limit: int = Query(default=10, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+):
+    """Concepts with evidence of weakness, weakest first.
+
+    Only concepts the learner has actually attempted are returned: an untouched
+    concept sits at the 0.5 prior, which means *unknown*, not *weak*.
+    """
+    service = await _learner_model(db, learner_id, domain_id)
+    weak = await service.get_weak_concepts(
+        learner_id, threshold=threshold, skill_id=skill_id, limit=limit
+    )
+    return WeakConceptResponse(
+        learner_id=learner_id,
+        domain_id=domain_id,
+        threshold=threshold,
+        weak_concepts=[state.to_dict() for state in weak],
+    )
+
+
+@router.get("/{learner_id}/ability-profile", response_model=AbilityProfile)
+async def get_learner_ability_profile(
+    learner_id: str,
+    domain_id: str = Query(default="ros2_robotics"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Whole-domain ability picture: the planner's primary input."""
+    service = await _learner_model(db, learner_id, domain_id)
+    return AbilityProfile(**await service.get_ability_profile(learner_id))
 
 
 async def _resolve_report_domain(

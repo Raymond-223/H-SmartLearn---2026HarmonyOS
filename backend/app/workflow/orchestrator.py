@@ -30,6 +30,7 @@ class Orchestrator:
         assessment_id: Optional[str] = None,
         target_skill_id: Optional[str] = None,
         version_filter: Optional[str] = None,
+        diagnosis_mode: str = "auto",
     ) -> WorkflowSession:
         learner = await self.db.get(LearnerProfile, learner_id)
         if learner is None:
@@ -80,6 +81,7 @@ class Orchestrator:
             mastery_state=mastery,
             source_skill_id=target_skill_id,
             version_filter=version_filter,
+            diagnosis_mode=diagnosis_mode,
         )
         session.state_data = state.to_dict()
         await self.transition_to(session, WorkflowStatus.PROFILE_READY)
@@ -160,6 +162,17 @@ class Orchestrator:
         if agent_type == "diagnosis_agent":
             state.mastery_state = output.get("mastery", state.mastery_state)
             state.target_skills = list((state.mastery_state or {}).keys())
+            # Beta posterior alongside the legacy 0-100 view; only overwrite when
+            # the agent actually produced one, so the legacy path stays intact.
+            for field_name in (
+                "learner_state",
+                "mastery_summary",
+                "diagnosis_session_id",
+                "weak_concepts",
+                "uncertain_concepts",
+            ):
+                if output.get(field_name) is not None:
+                    setattr(state, field_name, output[field_name])
         elif agent_type == "planner_agent":
             state.learning_path = output.get("learning_path", [])
             state.target_skills = output.get("target_skills", state.target_skills)

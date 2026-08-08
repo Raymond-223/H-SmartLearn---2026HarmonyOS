@@ -1,6 +1,6 @@
 """Database engine, session factory, schema creation, and domain-package seeding."""
 
-from sqlalchemy import event, select
+from sqlalchemy import event, inspect, select
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 
@@ -153,9 +153,36 @@ async def _seed_domain_packages(session: AsyncSession) -> None:
     await session.commit()
 
 
+def _add_missing_sqlite_columns(connection) -> None:
+    """Bring an existing SQLite file up to date with the current models.
+
+    ``create_all`` adds new *tables* but never new *columns*, so a developer or
+    test database created before a model gained a field keeps failing inserts
+    until it is deleted by hand. SQLite's ``ADD COLUMN`` covers the only kind of
+    change made here — nullable columns appended to a table. Anything else
+    (drops, type changes, constraints) still needs a real migration, and other
+    backends are left alone entirely.
+    """
+    inspector = inspect(connection)
+    existing_tables = set(inspector.get_table_names())
+    for table in Base.metadata.sorted_tables:
+        if table.name not in existing_tables:
+            continue
+        present = {column["name"] for column in inspector.get_columns(table.name)}
+        for column in table.columns:
+            if column.name in present or not column.nullable:
+                continue
+            column_type = column.type.compile(connection.dialect)
+            connection.exec_driver_sql(
+                f'ALTER TABLE "{table.name}" ADD COLUMN "{column.name}" {column_type}'
+            )
+
+
 async def init_db() -> None:
     import app.models  # noqa: F401 - registers all metadata
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all)
+        if "sqlite" in settings.database_url:
+            await connection.run_sync(_add_missing_sqlite_columns)
     async with async_session_factory() as session:
         await _seed_domain_packages(session)

@@ -109,6 +109,56 @@ def _package_fallback(domain_id: str) -> list[dict]:
     return result
 
 
+# Must match GenerationAgent._assessment_items_from_package's slice: those are
+# the bank items whose citations end up in the generated graded test.
+GENERATED_TEST_ITEMS = 3
+
+
+def _cited_evidence_ids(domain_id: str, skill_ids: list[str]) -> set[str]:
+    """Evidence the packaged lesson material for these skills already cites.
+
+    GenerationAgent copies ``evidence_ids`` verbatim out of ``practice_tasks``
+    and ``assessment_bank``, and ReviewAgent rejects any citation missing from
+    the retrieved ``evidence_list``. Relevance ranking alone does not guarantee
+    those units land in the top-K, so a perfectly valid packaged citation can be
+    reported as "引用不存在的证据" — the package accusing itself. Pinning them
+    here keeps the provenance chain intact instead of silently dropping the
+    citation at generation time.
+    """
+    from app.services.domain_package_service import load_assessment_bank, load_practice_tasks
+
+    if not skill_ids:
+        return set()
+    wanted = set(skill_ids)
+    required: set[str] = set()
+
+    def collect(container: dict) -> None:
+        for evidence_id in container.get("evidence_ids") or []:
+            if evidence_id:
+                required.add(str(evidence_id))
+
+    for task in load_practice_tasks(domain_id):
+        if str(task.get("skill_id", "")) not in wanted:
+            continue
+        collect(task)
+        for step in task.get("steps") or []:
+            collect(step)
+
+    # Only the items generation actually puts in the graded test, selected the
+    # same way GenerationAgent._assessment_items_from_package selects them.
+    # Pinning the whole bank would swamp the ranked results for no benefit.
+    for skill_id in sorted(wanted):
+        rows = [
+            item for item in load_assessment_bank(domain_id)
+            if str(item.get("skill_id", "")) == skill_id
+        ]
+        rows.sort(key=lambda item: (int(item.get("difficulty", 1)), str(item.get("id", ""))))
+        for item in rows[:GENERATED_TEST_ITEMS]:
+            collect(item)
+
+    return required
+
+
 def _apply_version_filter(docs: list[dict], version_filter: str | None) -> list[dict]:
     """Filter documents by version substring match."""
     if not version_filter:
@@ -305,6 +355,21 @@ class RetrievalAgent(BaseAgent):
         ]
         ranked.sort(key=lambda item: item[0], reverse=True)
         ranked = ranked[:self.TOP_K]
+
+        # 8b. Pin the evidence the packaged material for these skills cites.
+        # These are appended after the ranked head rather than competing with
+        # it, so relevance order is unchanged and only the tail grows. TOP_K is
+        # therefore the budget for *ranked* evidence, not the length of the
+        # list: the pinned tail is bounded by the package (one practice task
+        # plus GENERATED_TEST_ITEMS bank items per target skill).
+        required_ids = _cited_evidence_ids(context.domain_id, list(targets))
+        if required_ids:
+            present = {str(doc.get("evidence_id", "")) for _, doc in ranked}
+            ranked.extend(
+                (0.0, doc)
+                for doc in filtered_docs
+                if str(doc.get("evidence_id", "")) in required_ids - present
+            )
 
         # 9. Build evidence output
         evidence = []

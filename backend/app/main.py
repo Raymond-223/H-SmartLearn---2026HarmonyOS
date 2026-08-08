@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import init_db
-from app.api import learners, assessments, workflows, resources, admin, knowledge, benchmarks
+from app.api import learners, assessments, diagnosis, workflows, resources, admin, knowledge, benchmarks
 
 logging.basicConfig(
     level=logging.INFO if settings.debug else logging.WARNING,
@@ -36,8 +36,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for api_router in (learners.router, assessments.router, workflows.router, resources.router,
-                   knowledge.router, benchmarks.router, admin.router):
+for api_router in (learners.router, assessments.router, diagnosis.router, workflows.router,
+                   resources.router, knowledge.router, benchmarks.router, admin.router):
     app.include_router(api_router)
 
 
