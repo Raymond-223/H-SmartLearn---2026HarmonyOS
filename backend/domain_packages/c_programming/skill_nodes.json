@@ -1,0 +1,122 @@
+[
+  {
+    "id": "c_basic",
+    "name": "C语言基础",
+    "difficulty": 1,
+    "estimated_minutes": 45,
+    "objectives": [
+      "理解程序入口与编译流程"
+    ],
+    "criteria": [
+      "能编译运行Hello World"
+    ]
+  },
+  {
+    "id": "c_variable",
+    "name": "变量与常量",
+    "difficulty": 1,
+    "estimated_minutes": 45,
+    "objectives": [
+      "掌握变量声明与作用域"
+    ],
+    "criteria": [
+      "能选择合法标识符"
+    ]
+  },
+  {
+    "id": "c_datatype",
+    "name": "基本数据类型",
+    "difficulty": 1,
+    "estimated_minutes": 60,
+    "objectives": [
+      "理解int、char、float"
+    ],
+    "criteria": [
+      "能按数据选择类型"
+    ]
+  },
+  {
+    "id": "c_operator",
+    "name": "运算符与表达式",
+    "difficulty": 2,
+    "estimated_minutes": 60,
+    "objectives": [
+      "掌握算术与逻辑表达式"
+    ],
+    "criteria": [
+      "能判断表达式结果"
+    ]
+  },
+  {
+    "id": "c_control",
+    "name": "程序控制结构",
+    "difficulty": 2,
+    "estimated_minutes": 75,
+    "objectives": [
+      "理解顺序、选择、循环"
+    ],
+    "criteria": [
+      "能组合基本控制结构"
+    ]
+  },
+  {
+    "id": "c_if",
+    "name": "条件语句",
+    "difficulty": 2,
+    "estimated_minutes": 45,
+    "objectives": [
+      "掌握if与switch"
+    ],
+    "criteria": [
+      "能实现多分支判断"
+    ]
+  },
+  {
+    "id": "c_loop",
+    "name": "循环语句",
+    "difficulty": 2,
+    "estimated_minutes": 60,
+    "objectives": [
+      "掌握for、while与break"
+    ],
+    "criteria": [
+      "能编写有边界循环"
+    ]
+  },
+  {
+    "id": "c_array",
+    "name": "数组",
+    "difficulty": 3,
+    "estimated_minutes": 90,
+    "objectives": [
+      "理解连续存储与下标"
+    ],
+    "criteria": [
+      "能避免数组越界"
+    ]
+  },
+  {
+    "id": "c_function",
+    "name": "函数",
+    "difficulty": 3,
+    "estimated_minutes": 90,
+    "objectives": [
+      "掌握参数与返回值"
+    ],
+    "criteria": [
+      "能拆分可复用函数"
+    ]
+  },
+  {
+    "id": "c_pointer",
+    "name": "指针基础",
+    "difficulty": 4,
+    "estimated_minutes": 120,
+    "objectives": [
+      "理解地址、解引用和数组关系"
+    ],
+    "criteria": [
+      "能安全使用基础指针"
+    ]
+  }
+]

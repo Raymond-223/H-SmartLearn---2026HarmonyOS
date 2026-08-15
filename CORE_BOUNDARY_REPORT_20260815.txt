@@ -1,0 +1,6 @@
+Core boundary comparison against H-SmartLearn-ProofGraph-formal-only-20260815
+Unchanged backend/app Python files: 71
+Changed/missing files: 1
+CHANGED: main.py
+
+Expected result: only main.py is CHANGED, solely to mount the read-only observability router.

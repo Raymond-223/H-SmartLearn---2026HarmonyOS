@@ -1,0 +1,13 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/LearnerProfilePage",
+    "pages/QuizPage",
+    "pages/WorkflowProcessPage",
+    "pages/ResourceViewPage",
+    "pages/ReportPage",
+    "pages/SkillGraphPage",
+    "pages/BenchmarkPage",
+    "pages/ConnectionPage"
+  ]
+}

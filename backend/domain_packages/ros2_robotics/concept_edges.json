@@ -1,0 +1,202 @@
+[
+  {
+    "from": "concept_linux_environment_01",
+    "to": "concept_linux_environment_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_linux_environment_02",
+    "to": "concept_linux_environment_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_linux_environment_03",
+    "to": "concept_linux_environment_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_linux_environment_04",
+    "to": "concept_linux_environment_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_node_01",
+    "to": "concept_ros2_node_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_node_02",
+    "to": "concept_ros2_node_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_node_03",
+    "to": "concept_ros2_node_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_node_04",
+    "to": "concept_ros2_node_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_topic_01",
+    "to": "concept_ros2_topic_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_topic_02",
+    "to": "concept_ros2_topic_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_topic_03",
+    "to": "concept_ros2_topic_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_topic_04",
+    "to": "concept_ros2_topic_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_topic_custom_01",
+    "to": "concept_ros2_topic_custom_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_topic_custom_02",
+    "to": "concept_ros2_topic_custom_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_topic_custom_03",
+    "to": "concept_ros2_topic_custom_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_topic_custom_04",
+    "to": "concept_ros2_topic_custom_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_service_01",
+    "to": "concept_ros2_service_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_service_02",
+    "to": "concept_ros2_service_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_service_03",
+    "to": "concept_ros2_service_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_service_04",
+    "to": "concept_ros2_service_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_tf2_01",
+    "to": "concept_ros2_tf2_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_tf2_02",
+    "to": "concept_ros2_tf2_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_tf2_03",
+    "to": "concept_ros2_tf2_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_tf2_04",
+    "to": "concept_ros2_tf2_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_launch_01",
+    "to": "concept_ros2_launch_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_launch_02",
+    "to": "concept_ros2_launch_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_launch_03",
+    "to": "concept_ros2_launch_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_launch_04",
+    "to": "concept_ros2_launch_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_nav2_basic_01",
+    "to": "concept_ros2_nav2_basic_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_nav2_basic_02",
+    "to": "concept_ros2_nav2_basic_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_nav2_basic_03",
+    "to": "concept_ros2_nav2_basic_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_nav2_basic_04",
+    "to": "concept_ros2_nav2_basic_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_slam_01",
+    "to": "concept_ros2_slam_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_slam_02",
+    "to": "concept_ros2_slam_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_slam_03",
+    "to": "concept_ros2_slam_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_slam_04",
+    "to": "concept_ros2_slam_05",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_robot_bringup_01",
+    "to": "concept_ros2_robot_bringup_02",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_robot_bringup_02",
+    "to": "concept_ros2_robot_bringup_03",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_robot_bringup_03",
+    "to": "concept_ros2_robot_bringup_04",
+    "relation": "prerequisite"
+  },
+  {
+    "from": "concept_ros2_robot_bringup_04",
+    "to": "concept_ros2_robot_bringup_05",
+    "relation": "prerequisite"
+  }
+]

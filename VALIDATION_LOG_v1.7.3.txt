@@ -1,0 +1,1 @@
+{"status": "passed", "ets_files": 24, "registered_pages": 9, "button_contracts": 60, "interaction_contracts": ["diagnostic", "resource_test", "practice", "profile"]}

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence_unit.schema.json",
+  "title": "EvidenceUnit",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "evidence_id",
+    "claim",
+    "source_id",
+    "source_url",
+    "source_type",
+    "source_trust",
+    "source_locator",
+    "version",
+    "skill_id",
+    "concept_ids",
+    "importance",
+    "risk_level",
+    "applicability",
+    "verification_status",
+    "verification",
+    "provenance"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^ev_[a-z0-9_]+_[0-9]{3}$"
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 10
+    },
+    "content": {
+      "type": "string",
+      "minLength": 10
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 5
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "source_type": {
+      "enum": [
+        "official",
+        "community",
+        "local"
+      ]
+    },
+    "source_trust": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "source_locator": {
+      "type": "object",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "precision": {
+          "type": "string"
+        },
+        "human_confirmed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "version": {
+      "type": "string"
+    },
+    "skill_id": {
+      "type": "string"
+    },
+    "concept_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "importance": {
+      "enum": [
+        "core",
+        "support",
+        "extension"
+      ]
+    },
+    "risk_level": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "applicability": {
+      "type": "object",
+      "required": [
+        "ros_distro",
+        "os",
+        "architecture",
+        "hardware",
+        "permissions"
+      ]
+    },
+    "verification_status": {
+      "enum": [
+        "pending",
+        "trusted_source",
+        "verified",
+        "rejected"
+      ]
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "method",
+        "human_verified",
+        "requires_human_review",
+        "dataset_version"
+      ]
+    },
+    "verification_requirement": {
+      "type": "object"
+    },
+    "validator_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "provenance": {
+      "type": "object"
+    }
+  }
+}

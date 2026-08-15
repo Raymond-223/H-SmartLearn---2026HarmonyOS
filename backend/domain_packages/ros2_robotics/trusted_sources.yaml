@@ -1,0 +1,36 @@
+sources:
+- domain: docs.ros.org
+  type: official
+  language:
+  - en
+  - ja
+  - zh-cn
+  priority: 1
+  rate_limit: 10
+  source_id: source_docs_ros_org
+  trust_score: 1.0
+- domain: docs.nav2.org
+  type: official
+  language:
+  - en
+  priority: 1
+  rate_limit: 10
+  source_id: source_docs_nav2_org
+  trust_score: 1.0
+- domain: robotics.stackexchange.com
+  type: community
+  language:
+  - en
+  priority: 3
+  min_score: 2
+  rate_limit: 5
+  source_id: source_robotics_stackexchange_com
+  trust_score: 0.75
+- domain: index.ros.org
+  type: official
+  language:
+  - en
+  priority: 1
+  rate_limit: 10
+  source_id: source_index_ros_org
+  trust_score: 1.0

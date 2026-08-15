@@ -1,0 +1,10 @@
+rules:
+  lecture:
+    min_sections: 2
+    must_have_citations: true
+  practice_guide:
+    min_steps: 2
+    expected_result_required: true
+    safety_notes_required: true
+  graded_test:
+    min_items: 3

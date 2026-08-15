@@ -1,0 +1,25 @@
+Only in .: CHANGED_FILES_20260815.txt
+Only in .: CODE_AUDIT_AFTER_IMPROVEMENT_20260815.md
+Only in .: IMPROVEMENTS_20260815.md
+Only in ./backend/app/agents: critic_agent.py
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/agents/generation_agent.py and ./backend/app/agents/generation_agent.py differ
+Only in ./backend/app/agents: judge_agent.py
+Only in ./backend/app/agents: proofgraph_agent.py
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/agents/retrieval_agent.py and ./backend/app/agents/retrieval_agent.py differ
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/agents/review_agent.py and ./backend/app/agents/review_agent.py differ
+Only in ./backend/app/agents: risk_router_agent.py
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/api/assessments.py and ./backend/app/api/assessments.py differ
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/api/resources.py and ./backend/app/api/resources.py differ
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/api/workflows.py and ./backend/app/api/workflows.py differ
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/core/database.py and ./backend/app/core/database.py differ
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/schemas/resource.py and ./backend/app/schemas/resource.py differ
+Only in ./backend/app/services: claim_graph_service.py
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/services/mmr_service.py and ./backend/app/services/mmr_service.py differ
+Only in ./backend/app/services: risk_router_service.py
+Only in ./backend/app/services: validation_service.py
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/workflow/orchestrator.py and ./backend/app/workflow/orchestrator.py differ
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/backend/app/workflow/state.py and ./backend/app/workflow/state.py differ
+Only in ./backend/tests: test_proofgraph_runtime.py
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/entry/src/main/ets/pages/ResourceViewPage.ets and ./entry/src/main/ets/pages/ResourceViewPage.ets differ
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/entry/src/main/ets/pages/WorkflowProcessPage.ets and ./entry/src/main/ets/pages/WorkflowProcessPage.ets differ
+Files /mnt/data/H-SmartLearn-ProofGraph-merged-20260815/entry/src/main/ets/service/ApiService.ets and ./entry/src/main/ets/service/ApiService.ets differ

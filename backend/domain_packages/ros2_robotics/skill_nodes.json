@@ -1,0 +1,344 @@
+[
+  {
+    "id": "linux_environment",
+    "name": "Linux环境配置",
+    "module": "基础环境",
+    "description": "建立ROS2 Humble开发、构建和运行所需的Linux环境，理解环境叠加、通信域与常用诊断方法。",
+    "difficulty": 1,
+    "estimated_minutes": 60,
+    "objectives": [
+      "掌握Linux基本命令与ROS2环境加载",
+      "能够安装并核对ROS2 Humble",
+      "理解工作空间叠加与通信域"
+    ],
+    "criteria": [
+      "能使用source命令配置环境",
+      "能使用colcon编译工作空间",
+      "能定位环境变量或依赖导致的命令不可用问题"
+    ],
+    "prerequisite_ids": [],
+    "key_points": [
+      "发行版与操作系统匹配",
+      "source与环境叠加顺序",
+      "ROS_DOMAIN_ID隔离",
+      "依赖安装与rosdep",
+      "环境诊断与可复现配置"
+    ],
+    "tags": [
+      "ROS2",
+      "Humble",
+      "Linux",
+      "环境配置"
+    ]
+  },
+  {
+    "id": "ros2_node",
+    "name": "ROS2节点",
+    "module": "节点与执行模型",
+    "description": "理解ROS图中的节点职责、命名、回调与执行器模型，并能创建、运行和检查模块化节点。",
+    "difficulty": 2,
+    "estimated_minutes": 90,
+    "objectives": [
+      "理解节点的概念与单一职责",
+      "掌握Python和C++节点的创建方法",
+      "理解回调和执行器的调度关系"
+    ],
+    "criteria": [
+      "能创建并运行简单节点",
+      "能使用ros2 node命令查看节点信息",
+      "能解释回调阻塞或并发行为"
+    ],
+    "prerequisite_ids": [
+      "linux_environment"
+    ],
+    "key_points": [
+      "节点命名与命名空间",
+      "初始化与关闭",
+      "定时器和回调",
+      "执行器与回调组",
+      "ROS图发现"
+    ],
+    "tags": [
+      "ROS2",
+      "节点",
+      "rclpy",
+      "rclcpp"
+    ]
+  },
+  {
+    "id": "ros2_topic",
+    "name": "Topic话题通信",
+    "module": "Topic通信",
+    "description": "掌握ROS2发布订阅模型、Topic命名与消息流调试，能够根据数据特性配置并验证通信。",
+    "difficulty": 2,
+    "estimated_minutes": 120,
+    "objectives": [
+      "理解发布订阅模式",
+      "掌握Topic创建、发布和订阅",
+      "能检查频率、带宽与端点信息"
+    ],
+    "criteria": [
+      "能创建发布者和订阅者",
+      "能使用ros2 topic命令调试Topic",
+      "能识别类型或QoS不匹配"
+    ],
+    "prerequisite_ids": [
+      "linux_environment",
+      "ros2_node"
+    ],
+    "key_points": [
+      "异步发布订阅",
+      "Topic名称与类型",
+      "端点发现",
+      "消息频率和带宽",
+      "通信故障定位"
+    ],
+    "tags": [
+      "ROS2",
+      "Topic",
+      "Publisher",
+      "Subscriber"
+    ]
+  },
+  {
+    "id": "ros2_topic_custom",
+    "name": "自定义Topic消息",
+    "module": "自定义接口",
+    "description": "设计、生成和使用ROS2自定义消息接口，保证字段、依赖、版本与调用代码保持一致。",
+    "difficulty": 3,
+    "estimated_minutes": 90,
+    "objectives": [
+      "理解msg文件格式",
+      "掌握自定义消息的创建与构建",
+      "理解接口包的依赖和兼容边界"
+    ],
+    "criteria": [
+      "能定义并构建msg文件",
+      "能在代码中使用自定义消息类型",
+      "能使用ros2 interface命令核对接口"
+    ],
+    "prerequisite_ids": [
+      "ros2_topic"
+    ],
+    "key_points": [
+      "接口包独立",
+      "字段类型与数组",
+      "rosidl生成",
+      "依赖导出",
+      "接口版本兼容"
+    ],
+    "tags": [
+      "ROS2",
+      "msg",
+      "rosidl",
+      "接口定义"
+    ]
+  },
+  {
+    "id": "ros2_service",
+    "name": "Service服务通信",
+    "module": "Service通信",
+    "description": "掌握短时请求响应通信的接口设计、客户端与服务端实现，以及超时、重试和幂等边界。",
+    "difficulty": 3,
+    "estimated_minutes": 120,
+    "objectives": [
+      "理解请求响应模式",
+      "掌握Service服务端和客户端",
+      "能设计可诊断的失败处理"
+    ],
+    "criteria": [
+      "能创建并调用Service",
+      "能使用ros2 service命令调试",
+      "能正确处理超时、失败和重复请求"
+    ],
+    "prerequisite_ids": [
+      "ros2_node"
+    ],
+    "key_points": [
+      "同步请求响应",
+      "srv接口定义",
+      "异步客户端",
+      "超时与重试",
+      "幂等性"
+    ],
+    "tags": [
+      "ROS2",
+      "Service",
+      "Client",
+      "Server"
+    ]
+  },
+  {
+    "id": "ros2_tf2",
+    "name": "TF2坐标变换",
+    "module": "TF2坐标系统",
+    "description": "理解TF2坐标树、时间缓存和变换查询，能够发布、监听并诊断静态或动态坐标关系。",
+    "difficulty": 3,
+    "estimated_minutes": 150,
+    "objectives": [
+      "理解TF2树结构",
+      "掌握静态与动态变换发布",
+      "理解时间戳和查询缓存"
+    ],
+    "criteria": [
+      "能发布静态和动态坐标变换",
+      "能使用tf2_echo查看变换关系",
+      "能定位断树、循环与外推错误"
+    ],
+    "prerequisite_ids": [
+      "ros2_topic"
+    ],
+    "key_points": [
+      "父子坐标系",
+      "静态与动态变换",
+      "时间缓存",
+      "查询与消息变换",
+      "TF树诊断"
+    ],
+    "tags": [
+      "ROS2",
+      "TF2",
+      "坐标系",
+      "变换"
+    ]
+  },
+  {
+    "id": "ros2_launch",
+    "name": "Launch启动文件",
+    "module": "Launch编排",
+    "description": "使用ROS2 Launch描述多节点启动、参数、重映射和事件响应，形成可复现的系统编排入口。",
+    "difficulty": 2,
+    "estimated_minutes": 60,
+    "objectives": [
+      "理解Launch文件的作用",
+      "掌握Python Launch编写",
+      "能组织参数、命名空间和事件"
+    ],
+    "criteria": [
+      "能编写多节点Launch文件",
+      "能传递参数和启动参数",
+      "能处理节点退出或延迟启动"
+    ],
+    "prerequisite_ids": [
+      "ros2_node"
+    ],
+    "key_points": [
+      "LaunchDescription",
+      "Node动作",
+      "替换与条件",
+      "参数和重映射",
+      "事件处理"
+    ],
+    "tags": [
+      "ROS2",
+      "Launch",
+      "编排",
+      "启动"
+    ]
+  },
+  {
+    "id": "ros2_nav2_basic",
+    "name": "Nav2导航基础",
+    "module": "Nav2导航",
+    "description": "理解Nav2服务器、行为树、代价地图与规划控制链路，能够配置并验证移动机器人导航。",
+    "difficulty": 4,
+    "estimated_minutes": 180,
+    "objectives": [
+      "理解Nav2导航堆栈",
+      "掌握地图、定位、规划与控制概念",
+      "能配置行为树和恢复行为"
+    ],
+    "criteria": [
+      "能配置Nav2核心参数",
+      "能使用RViz2设置并完成导航目标",
+      "能依据日志和代价地图定位失败"
+    ],
+    "prerequisite_ids": [
+      "ros2_topic",
+      "ros2_tf2",
+      "ros2_robot_bringup"
+    ],
+    "key_points": [
+      "生命周期Bringup",
+      "全局与局部代价地图",
+      "规划器和控制器",
+      "行为树导航",
+      "恢复与验收"
+    ],
+    "tags": [
+      "ROS2",
+      "Nav2",
+      "导航",
+      "移动机器人"
+    ]
+  },
+  {
+    "id": "ros2_slam",
+    "name": "SLAM建图",
+    "module": "SLAM建图",
+    "description": "掌握SLAM Toolbox建图所需的传感器、里程计与TF输入，理解位姿图、回环和地图保存流程。",
+    "difficulty": 4,
+    "estimated_minutes": 180,
+    "objectives": [
+      "理解SLAM基本原理",
+      "掌握SLAM Toolbox在线建图",
+      "能评估地图质量并定位输入问题"
+    ],
+    "criteria": [
+      "能运行SLAM节点并生成地图",
+      "能保存和加载地图",
+      "能诊断扫描、里程计或TF导致的地图异常"
+    ],
+    "prerequisite_ids": [
+      "ros2_tf2",
+      "ros2_robot_bringup"
+    ],
+    "key_points": [
+      "LaserScan输入",
+      "里程计与TF",
+      "扫描匹配",
+      "回环与位姿图",
+      "地图保存评估"
+    ],
+    "tags": [
+      "ROS2",
+      "SLAM",
+      "slam_toolbox",
+      "建图"
+    ]
+  },
+  {
+    "id": "ros2_robot_bringup",
+    "name": "机器人驱动集成",
+    "module": "机器人驱动集成",
+    "description": "整合URDF、robot_state_publisher、传感器与底盘驱动，形成从模型到真实硬件的可诊断Bringup流程。",
+    "difficulty": 3,
+    "estimated_minutes": 120,
+    "objectives": [
+      "理解URDF机器人模型",
+      "掌握硬件驱动与状态发布配置",
+      "能组织机器人Bringup启动流程"
+    ],
+    "criteria": [
+      "能编写并校验URDF",
+      "能启动底盘与传感器驱动",
+      "能核对robot_description、JointState和TF输出"
+    ],
+    "prerequisite_ids": [
+      "ros2_launch"
+    ],
+    "key_points": [
+      "URDF与Xacro",
+      "robot_description",
+      "状态发布",
+      "硬件驱动接口",
+      "Bringup诊断"
+    ],
+    "tags": [
+      "ROS2",
+      "URDF",
+      "驱动",
+      "Bringup"
+    ]
+  }
+]

@@ -1,0 +1,882 @@
+[
+  {
+    "id": "concept_linux_environment_01",
+    "name": "发行版与操作系统匹配",
+    "skill_id": "linux_environment",
+    "difficulty": 1,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "Humble",
+      "Linux",
+      "环境配置",
+      "发行版与操作系统匹配"
+    ]
+  },
+  {
+    "id": "concept_linux_environment_02",
+    "name": "source与环境叠加顺序",
+    "skill_id": "linux_environment",
+    "difficulty": 1,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_linux_environment_01"
+    ],
+    "tags": [
+      "ROS2",
+      "Humble",
+      "Linux",
+      "环境配置",
+      "source与环境叠加顺序"
+    ]
+  },
+  {
+    "id": "concept_linux_environment_03",
+    "name": "ROS_DOMAIN_ID隔离",
+    "skill_id": "linux_environment",
+    "difficulty": 1,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_linux_environment_02"
+    ],
+    "tags": [
+      "ROS2",
+      "Humble",
+      "Linux",
+      "环境配置",
+      "ROS_DOMAIN_ID隔离"
+    ]
+  },
+  {
+    "id": "concept_linux_environment_04",
+    "name": "依赖安装与rosdep",
+    "skill_id": "linux_environment",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_linux_environment_03"
+    ],
+    "tags": [
+      "ROS2",
+      "Humble",
+      "Linux",
+      "环境配置",
+      "依赖安装与rosdep"
+    ]
+  },
+  {
+    "id": "concept_linux_environment_05",
+    "name": "环境诊断与可复现配置",
+    "skill_id": "linux_environment",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_linux_environment_04"
+    ],
+    "tags": [
+      "ROS2",
+      "Humble",
+      "Linux",
+      "环境配置",
+      "环境诊断与可复现配置"
+    ]
+  },
+  {
+    "id": "concept_ros2_node_01",
+    "name": "节点命名与命名空间",
+    "skill_id": "ros2_node",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "节点",
+      "rclpy",
+      "rclcpp",
+      "节点命名与命名空间"
+    ]
+  },
+  {
+    "id": "concept_ros2_node_02",
+    "name": "初始化与关闭",
+    "skill_id": "ros2_node",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_node_01"
+    ],
+    "tags": [
+      "ROS2",
+      "节点",
+      "rclpy",
+      "rclcpp",
+      "初始化与关闭"
+    ]
+  },
+  {
+    "id": "concept_ros2_node_03",
+    "name": "定时器和回调",
+    "skill_id": "ros2_node",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_node_02"
+    ],
+    "tags": [
+      "ROS2",
+      "节点",
+      "rclpy",
+      "rclcpp",
+      "定时器和回调"
+    ]
+  },
+  {
+    "id": "concept_ros2_node_04",
+    "name": "执行器与回调组",
+    "skill_id": "ros2_node",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_node_03"
+    ],
+    "tags": [
+      "ROS2",
+      "节点",
+      "rclpy",
+      "rclcpp",
+      "执行器与回调组"
+    ]
+  },
+  {
+    "id": "concept_ros2_node_05",
+    "name": "ROS图发现",
+    "skill_id": "ros2_node",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_node_04"
+    ],
+    "tags": [
+      "ROS2",
+      "节点",
+      "rclpy",
+      "rclcpp",
+      "ROS图发现"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_01",
+    "name": "异步发布订阅",
+    "skill_id": "ros2_topic",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "Topic",
+      "Publisher",
+      "Subscriber",
+      "异步发布订阅"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_02",
+    "name": "Topic名称与类型",
+    "skill_id": "ros2_topic",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_topic_01"
+    ],
+    "tags": [
+      "ROS2",
+      "Topic",
+      "Publisher",
+      "Subscriber",
+      "Topic名称与类型"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_03",
+    "name": "端点发现",
+    "skill_id": "ros2_topic",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_topic_02"
+    ],
+    "tags": [
+      "ROS2",
+      "Topic",
+      "Publisher",
+      "Subscriber",
+      "端点发现"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_04",
+    "name": "消息频率和带宽",
+    "skill_id": "ros2_topic",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_topic_03"
+    ],
+    "tags": [
+      "ROS2",
+      "Topic",
+      "Publisher",
+      "Subscriber",
+      "消息频率和带宽"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_05",
+    "name": "通信故障定位",
+    "skill_id": "ros2_topic",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_topic_04"
+    ],
+    "tags": [
+      "ROS2",
+      "Topic",
+      "Publisher",
+      "Subscriber",
+      "通信故障定位"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_custom_01",
+    "name": "接口包独立",
+    "skill_id": "ros2_topic_custom",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "msg",
+      "rosidl",
+      "接口定义",
+      "接口包独立"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_custom_02",
+    "name": "字段类型与数组",
+    "skill_id": "ros2_topic_custom",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_topic_custom_01"
+    ],
+    "tags": [
+      "ROS2",
+      "msg",
+      "rosidl",
+      "接口定义",
+      "字段类型与数组"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_custom_03",
+    "name": "rosidl生成",
+    "skill_id": "ros2_topic_custom",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_topic_custom_02"
+    ],
+    "tags": [
+      "ROS2",
+      "msg",
+      "rosidl",
+      "接口定义",
+      "rosidl生成"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_custom_04",
+    "name": "依赖导出",
+    "skill_id": "ros2_topic_custom",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_topic_custom_03"
+    ],
+    "tags": [
+      "ROS2",
+      "msg",
+      "rosidl",
+      "接口定义",
+      "依赖导出"
+    ]
+  },
+  {
+    "id": "concept_ros2_topic_custom_05",
+    "name": "接口版本兼容",
+    "skill_id": "ros2_topic_custom",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_topic_custom_04"
+    ],
+    "tags": [
+      "ROS2",
+      "msg",
+      "rosidl",
+      "接口定义",
+      "接口版本兼容"
+    ]
+  },
+  {
+    "id": "concept_ros2_service_01",
+    "name": "同步请求响应",
+    "skill_id": "ros2_service",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "Service",
+      "Client",
+      "Server",
+      "同步请求响应"
+    ]
+  },
+  {
+    "id": "concept_ros2_service_02",
+    "name": "srv接口定义",
+    "skill_id": "ros2_service",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_service_01"
+    ],
+    "tags": [
+      "ROS2",
+      "Service",
+      "Client",
+      "Server",
+      "srv接口定义"
+    ]
+  },
+  {
+    "id": "concept_ros2_service_03",
+    "name": "异步客户端",
+    "skill_id": "ros2_service",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_service_02"
+    ],
+    "tags": [
+      "ROS2",
+      "Service",
+      "Client",
+      "Server",
+      "异步客户端"
+    ]
+  },
+  {
+    "id": "concept_ros2_service_04",
+    "name": "超时与重试",
+    "skill_id": "ros2_service",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_service_03"
+    ],
+    "tags": [
+      "ROS2",
+      "Service",
+      "Client",
+      "Server",
+      "超时与重试"
+    ]
+  },
+  {
+    "id": "concept_ros2_service_05",
+    "name": "幂等性",
+    "skill_id": "ros2_service",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_service_04"
+    ],
+    "tags": [
+      "ROS2",
+      "Service",
+      "Client",
+      "Server",
+      "幂等性"
+    ]
+  },
+  {
+    "id": "concept_ros2_tf2_01",
+    "name": "父子坐标系",
+    "skill_id": "ros2_tf2",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "TF2",
+      "坐标系",
+      "变换",
+      "父子坐标系"
+    ]
+  },
+  {
+    "id": "concept_ros2_tf2_02",
+    "name": "静态与动态变换",
+    "skill_id": "ros2_tf2",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_tf2_01"
+    ],
+    "tags": [
+      "ROS2",
+      "TF2",
+      "坐标系",
+      "变换",
+      "静态与动态变换"
+    ]
+  },
+  {
+    "id": "concept_ros2_tf2_03",
+    "name": "时间缓存",
+    "skill_id": "ros2_tf2",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_tf2_02"
+    ],
+    "tags": [
+      "ROS2",
+      "TF2",
+      "坐标系",
+      "变换",
+      "时间缓存"
+    ]
+  },
+  {
+    "id": "concept_ros2_tf2_04",
+    "name": "查询与消息变换",
+    "skill_id": "ros2_tf2",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_tf2_03"
+    ],
+    "tags": [
+      "ROS2",
+      "TF2",
+      "坐标系",
+      "变换",
+      "查询与消息变换"
+    ]
+  },
+  {
+    "id": "concept_ros2_tf2_05",
+    "name": "TF树诊断",
+    "skill_id": "ros2_tf2",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_tf2_04"
+    ],
+    "tags": [
+      "ROS2",
+      "TF2",
+      "坐标系",
+      "变换",
+      "TF树诊断"
+    ]
+  },
+  {
+    "id": "concept_ros2_launch_01",
+    "name": "LaunchDescription",
+    "skill_id": "ros2_launch",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "Launch",
+      "编排",
+      "启动",
+      "LaunchDescription"
+    ]
+  },
+  {
+    "id": "concept_ros2_launch_02",
+    "name": "Node动作",
+    "skill_id": "ros2_launch",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_launch_01"
+    ],
+    "tags": [
+      "ROS2",
+      "Launch",
+      "编排",
+      "启动",
+      "Node动作"
+    ]
+  },
+  {
+    "id": "concept_ros2_launch_03",
+    "name": "替换与条件",
+    "skill_id": "ros2_launch",
+    "difficulty": 2,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_launch_02"
+    ],
+    "tags": [
+      "ROS2",
+      "Launch",
+      "编排",
+      "启动",
+      "替换与条件"
+    ]
+  },
+  {
+    "id": "concept_ros2_launch_04",
+    "name": "参数和重映射",
+    "skill_id": "ros2_launch",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_launch_03"
+    ],
+    "tags": [
+      "ROS2",
+      "Launch",
+      "编排",
+      "启动",
+      "参数和重映射"
+    ]
+  },
+  {
+    "id": "concept_ros2_launch_05",
+    "name": "事件处理",
+    "skill_id": "ros2_launch",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_launch_04"
+    ],
+    "tags": [
+      "ROS2",
+      "Launch",
+      "编排",
+      "启动",
+      "事件处理"
+    ]
+  },
+  {
+    "id": "concept_ros2_nav2_basic_01",
+    "name": "生命周期Bringup",
+    "skill_id": "ros2_nav2_basic",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "Nav2",
+      "导航",
+      "移动机器人",
+      "生命周期Bringup"
+    ]
+  },
+  {
+    "id": "concept_ros2_nav2_basic_02",
+    "name": "全局与局部代价地图",
+    "skill_id": "ros2_nav2_basic",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_nav2_basic_01"
+    ],
+    "tags": [
+      "ROS2",
+      "Nav2",
+      "导航",
+      "移动机器人",
+      "全局与局部代价地图"
+    ]
+  },
+  {
+    "id": "concept_ros2_nav2_basic_03",
+    "name": "规划器和控制器",
+    "skill_id": "ros2_nav2_basic",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_nav2_basic_02"
+    ],
+    "tags": [
+      "ROS2",
+      "Nav2",
+      "导航",
+      "移动机器人",
+      "规划器和控制器"
+    ]
+  },
+  {
+    "id": "concept_ros2_nav2_basic_04",
+    "name": "行为树导航",
+    "skill_id": "ros2_nav2_basic",
+    "difficulty": 5,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_nav2_basic_03"
+    ],
+    "tags": [
+      "ROS2",
+      "Nav2",
+      "导航",
+      "移动机器人",
+      "行为树导航"
+    ]
+  },
+  {
+    "id": "concept_ros2_nav2_basic_05",
+    "name": "恢复与验收",
+    "skill_id": "ros2_nav2_basic",
+    "difficulty": 5,
+    "risk_level": "medium",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_nav2_basic_04"
+    ],
+    "tags": [
+      "ROS2",
+      "Nav2",
+      "导航",
+      "移动机器人",
+      "恢复与验收"
+    ]
+  },
+  {
+    "id": "concept_ros2_slam_01",
+    "name": "LaserScan输入",
+    "skill_id": "ros2_slam",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "SLAM",
+      "slam_toolbox",
+      "建图",
+      "LaserScan输入"
+    ]
+  },
+  {
+    "id": "concept_ros2_slam_02",
+    "name": "里程计与TF",
+    "skill_id": "ros2_slam",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_slam_01"
+    ],
+    "tags": [
+      "ROS2",
+      "SLAM",
+      "slam_toolbox",
+      "建图",
+      "里程计与TF"
+    ]
+  },
+  {
+    "id": "concept_ros2_slam_03",
+    "name": "扫描匹配",
+    "skill_id": "ros2_slam",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_slam_02"
+    ],
+    "tags": [
+      "ROS2",
+      "SLAM",
+      "slam_toolbox",
+      "建图",
+      "扫描匹配"
+    ]
+  },
+  {
+    "id": "concept_ros2_slam_04",
+    "name": "回环与位姿图",
+    "skill_id": "ros2_slam",
+    "difficulty": 5,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_slam_03"
+    ],
+    "tags": [
+      "ROS2",
+      "SLAM",
+      "slam_toolbox",
+      "建图",
+      "回环与位姿图"
+    ]
+  },
+  {
+    "id": "concept_ros2_slam_05",
+    "name": "地图保存评估",
+    "skill_id": "ros2_slam",
+    "difficulty": 5,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_slam_04"
+    ],
+    "tags": [
+      "ROS2",
+      "SLAM",
+      "slam_toolbox",
+      "建图",
+      "地图保存评估"
+    ]
+  },
+  {
+    "id": "concept_ros2_robot_bringup_01",
+    "name": "URDF与Xacro",
+    "skill_id": "ros2_robot_bringup",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [],
+    "tags": [
+      "ROS2",
+      "URDF",
+      "驱动",
+      "Bringup",
+      "URDF与Xacro"
+    ]
+  },
+  {
+    "id": "concept_ros2_robot_bringup_02",
+    "name": "robot_description",
+    "skill_id": "ros2_robot_bringup",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_robot_bringup_01"
+    ],
+    "tags": [
+      "ROS2",
+      "URDF",
+      "驱动",
+      "Bringup",
+      "robot_description"
+    ]
+  },
+  {
+    "id": "concept_ros2_robot_bringup_03",
+    "name": "状态发布",
+    "skill_id": "ros2_robot_bringup",
+    "difficulty": 3,
+    "risk_level": "low",
+    "importance": "core",
+    "prerequisite_concept_ids": [
+      "concept_ros2_robot_bringup_02"
+    ],
+    "tags": [
+      "ROS2",
+      "URDF",
+      "驱动",
+      "Bringup",
+      "状态发布"
+    ]
+  },
+  {
+    "id": "concept_ros2_robot_bringup_04",
+    "name": "硬件驱动接口",
+    "skill_id": "ros2_robot_bringup",
+    "difficulty": 4,
+    "risk_level": "medium",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_robot_bringup_03"
+    ],
+    "tags": [
+      "ROS2",
+      "URDF",
+      "驱动",
+      "Bringup",
+      "硬件驱动接口"
+    ]
+  },
+  {
+    "id": "concept_ros2_robot_bringup_05",
+    "name": "Bringup诊断",
+    "skill_id": "ros2_robot_bringup",
+    "difficulty": 4,
+    "risk_level": "low",
+    "importance": "support",
+    "prerequisite_concept_ids": [
+      "concept_ros2_robot_bringup_04"
+    ],
+    "tags": [
+      "ROS2",
+      "URDF",
+      "驱动",
+      "Bringup",
+      "Bringup诊断"
+    ]
+  }
+]

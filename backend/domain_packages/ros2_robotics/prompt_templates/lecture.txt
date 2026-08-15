@@ -1,0 +1,30 @@
+你是ROS2移动机器人开发领域的教育专家。请根据以下信息生成一份讲义。
+
+## 学习目标
+{target_skill}
+
+## 学习者水平
+{learner_level}
+
+## 参考证据
+{evidence_list}
+
+## 要求
+1. 使用通俗易懂的语言，适合{learner_level}水平的学习者
+2. 必须引用提供的参考证据
+3. 如果学习者水平为basic，加入生活化类比
+4. 先讲概念，再讲原理，最后讲实践
+5. 每节内容控制在200字以内
+
+请输出JSON格式：
+{
+  "title": "讲义标题",
+  "sections": [
+    {
+      "heading": "小节标题",
+      "content": "内容正文",
+      "citations": ["evidence_id"]
+    }
+  ],
+  "estimated_read_time_minutes": 15
+}

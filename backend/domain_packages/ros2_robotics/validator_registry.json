@@ -1,0 +1,132 @@
+[
+  {
+    "id": "val_ros_env",
+    "name": "ROS环境静态检查",
+    "type": "deterministic_rule",
+    "risk_ceiling": "low",
+    "checks": [
+      "ros_distro",
+      "environment_source",
+      "overlay_path"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_ros_graph",
+    "name": "ROS图实体检查",
+    "type": "deterministic_rule",
+    "risk_ceiling": "low",
+    "checks": [
+      "node_exists",
+      "topic_exists",
+      "service_exists",
+      "endpoint_type"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_qos",
+    "name": "QoS兼容性检查",
+    "type": "deterministic_rule",
+    "risk_ceiling": "medium",
+    "checks": [
+      "reliability",
+      "durability",
+      "history_depth",
+      "endpoint_compatibility"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_tf",
+    "name": "TF链与时间检查",
+    "type": "deterministic_rule",
+    "risk_ceiling": "medium",
+    "checks": [
+      "frame_exists",
+      "transform_chain",
+      "timestamp_consistency"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_launch",
+    "name": "Launch参数与资源检查",
+    "type": "static_check",
+    "risk_ceiling": "medium",
+    "checks": [
+      "package_exists",
+      "launch_file_exists",
+      "argument_mapping",
+      "parameter_file_exists"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_nav2",
+    "name": "Nav2前置条件检查",
+    "type": "deterministic_rule",
+    "risk_ceiling": "medium",
+    "checks": [
+      "tf_chain",
+      "lifecycle_state",
+      "cmd_vel_endpoint",
+      "costmap_inputs"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_slam",
+    "name": "SLAM输入输出检查",
+    "type": "deterministic_rule",
+    "risk_ceiling": "medium",
+    "checks": [
+      "scan_topic",
+      "tf_chain",
+      "map_output",
+      "timestamp_consistency"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_urdf",
+    "name": "URDF/Xacro静态检查",
+    "type": "static_check",
+    "risk_ceiling": "medium",
+    "checks": [
+      "xacro_parse",
+      "urdf_parse",
+      "joint_tree",
+      "frame_naming"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_device",
+    "name": "设备/权限操作检查",
+    "type": "static_check",
+    "risk_ceiling": "high",
+    "checks": [
+      "device_path",
+      "permissions",
+      "udev_match",
+      "destructive_command_guard"
+    ],
+    "implementation_status": "spec_only"
+  },
+  {
+    "id": "val_command_safety",
+    "name": "命令安全门",
+    "type": "static_check",
+    "risk_ceiling": "critical",
+    "checks": [
+      "destructive_command",
+      "sudo",
+      "disk_write",
+      "network_change",
+      "firmware",
+      "host_device_access"
+    ],
+    "implementation_status": "spec_only"
+  }
+]

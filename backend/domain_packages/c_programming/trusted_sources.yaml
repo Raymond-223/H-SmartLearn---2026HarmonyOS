@@ -1,0 +1,9 @@
+sources:
+  - domain: en.cppreference.com
+    type: reference
+    language: [en]
+    priority: 1
+  - domain: open-std.org
+    type: standard
+    language: [en]
+    priority: 1
